@@ -87,8 +87,6 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
-
-
 //END CAROUSEL CARDS
 
 //CONTENT CARD OPEN ANIMATION
