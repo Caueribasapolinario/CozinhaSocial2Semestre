@@ -16,9 +16,15 @@ window.addEventListener("load", async () => {
 
 function MontarSobre(element) {
     const h2 =document.createElement("h2");
-    h2.innerText = .Descricao;
+    h2.innerText = element.Descricao;
 
     const h3 = document.createElement("h3");
-    h3.innerText = .FraseFinal;
+    h3.innerText = element.FraseFinal;
+
+    const div = document.createElement("div");
+    div.classList.add("valor");
+    div.append(h2, h3);
+
+    return div;
 
 }
