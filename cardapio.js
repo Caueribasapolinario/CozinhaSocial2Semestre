@@ -1,4 +1,4 @@
-const url = "https://utmu0l1z.api.sanity.io/v2022-03-07/data/query/production?query=*%5B_type+%3D%3D+%22cardapioSegunda%22%5D%0A&perspective=previewDrafts";
+const url = "https://utmu0l1z.api.sanity.io/v2022-03-07/data/query/production?query=*%5B_type+%3D%3D+%22cardapio%22%5D%0A&perspective=previewDrafts";
 
 window.addEventListener("load", async () => {
     const wrapper = document.querySelector("div.describ-cardapio-itens")
@@ -10,11 +10,11 @@ window.addEventListener("load", async () => {
     const data = await result.json();
 
     data.result.forEach(element => {
-        monstarCardapio(element);
+        mostarCardapio(element);
     });
 });
 
-function monstarCardapio(element){
+function mostarCardapio(element){
     console.log(element)
 
     const a =document.createElement("a");
