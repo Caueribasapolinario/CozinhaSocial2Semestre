@@ -1,85 +1,126 @@
-const url = "https://utmu0l1z.api.sanity.io/v2022-03-07/data/query/production?query=*%5B_type+%3D%3D+%22cardapio%22%5D%0A&perspective=previewDrafts";
+const url = "https://utmu0l1z.api.sanity.io/v2022-03-07/data/query/production?query=*%5B_type+%3D%3D+%22cardapio%22+%7C%7C+_type+%3D%3D+%22itens%22%5D&perspective=previewDrafts";
 
 window.addEventListener("load", async () => {
     const wrapper = document.querySelector("div.describ-cardapio-itens")
 
-    const result = await fetch (url, {
+    const result = await fetch(url, {
         method: "GET",
     });
 
     const data = await result.json();
 
-    data.result.forEach(element => {
+    const itens = [];
+    const diasBrute = [];
+
+    for (let i = 0; i < data.result.length; i++) {
+        let obj = data.result[i];
+        if (obj._type == "itens") {
+            const newObj = { subtype: obj.subtipo, id: obj._id, nome: obj.ingrediente };
+            itens.push(newObj);
+        } else if (obj._type == "cardapio") {
+            const newObj = { id: obj._id, dia: obj.dia, principais: obj.principais, ordem: obj.order, complementos: obj.complementos };
+            diasBrute.push(newObj);
+        }
+    }
+
+    const dias = [];
+    for (let i = 0; i < diasBrute.length; i++) {
+        const dia = { ...diasBrute[i] };
+        const principais = [];
+        for (let j = 0; j < dia.principais.length; j++) {
+            let principal = dia.principais[j];
+            const findItem = itens.find((item) => item.id === principal._ref);
+            const newObj = { id: findItem.id, nome: findItem.nome };
+            principais.push(newObj);
+        }
+        dia.principais = principais;
+
+        const complementos = [];
+        for (let j = 0; j < dia.complementos.length; j++) {
+            let complemento = dia.complementos[j];
+            const findItem = itens.find((item) => item.id === complemento._ref);
+            const newObj = { id: findItem.id, nome: findItem.nome, ordem: dia.ordem };
+            complementos.push(newObj);
+        }
+        dia.complementos = complementos;
+        dias.push(dia);
+    }
+
+    dias.sort((a, b) => a.ordem - b.ordem);
+
+    dias.forEach(element => {
         mostarCardapio(element);
     });
 });
 
-function mostarCardapio(element){
-    console.log(element)
+function mostarCardapio(element) {
 
-    const a =document.createElement("a");
-    a.innerText = 'Principal:';
+    const cardCardapio = document.createElement("div");
+    cardCardapio.className = "card-cardapio";
 
+    const diaArea = document.createElement("div");
+    diaArea.className = "dia-area";
+
+    const nomeDia = document.createElement("a");
+    nomeDia.className = "nome-dia";
+    nomeDia.innerText = element.dia;
+
+    diaArea.append(nomeDia);
+    cardCardapio.append(diaArea);
+
+    const describCardapio = document.createElement("div");
+    describCardapio.className = "describ-cardapio";
+
+    const describCardapioItens = document.createElement("div");
+    describCardapioItens.className = "describ-cardapio-itens";
+
+    describCardapio.append(describCardapioItens);
+    cardCardapio.append(describCardapio);
+
+    const containerDias = document.getElementById('container-dias');
+
+    const a = document.createElement("a");
+    a.style.fontSize = '23px';
+    a.classList = 'fodaseBOld'
+    a.innerText = 'Pratos principais:';
     const li = document.createElement("li");
     li.append(a);
 
-    const a1 =document.createElement("a");
-    a1.innerText = element.ingrediente1;
+    const div = describCardapioItens;
+    div.append(a, li);
 
-    const li1 = document.createElement("li");
-    li1.append(a1);
+    const elements = [];
+    for (let i = 0; i < element.principais.length; i++) {
+        const principal = element.principais[i];
+        const a = document.createElement("a");
+        a.style.fontSize = '18px';
+        a.innerText = principal.nome;
+        const li = document.createElement("li");
+        li.append(a);
+        elements.push(a, li);
+        div.append(a, li);
+    }
 
-    const a2 =document.createElement("a");
-    a2.innerText = element.ingrediente2;
+    const br = document.createElement('br')
 
-    const li2 = document.createElement("li");
-    li2.append(a2);
+    const sectionComplemento = document.createElement('section');
+    const aComplemento = document.createElement("a");
+    aComplemento.style.fontSize = '23px';
+    aComplemento.classList = 'fodaseBOld'
+    aComplemento.innerText = 'Complementos:';
+    sectionComplemento.append(br, aComplemento)
+    div.append(sectionComplemento)
 
-    const a3 =document.createElement("a");
-    a3.innerText = element.ingrediente3;
+    for (let i = 0; i < element.complementos.length; i++) {
+        const complemento = element.complementos[i];
+        const a = document.createElement("a");
+        a.style.fontSize = '18px';
+        a.innerText = complemento.nome;
+        const li = document.createElement("li");
+        li.append(a);
+        elements.push(a, li);
+        div.append(a, li);
+    }
 
-    const li3 = document.createElement("li");
-    li3.append(a3);
-
-    const a4 =document.createElement("a");
-    a4.innerText = element.ingrediente4;
-
-    const li4 = document.createElement("li");
-    li4.append(a4);
-
-    const br1 = document.createElement('br')
-
-    const hr = document.createElement('hr')
-
-    const br2 = document.createElement('br')
-
-    const a5 =document.createElement("a");
-    a5.innerText = 'Complemento:';
-
-    
-    const br3 = document.createElement('br')
-
-    const li5 = document.createElement("li");
-    li5.append(a5);
-
-    const a6 =document.createElement("a");
-    a6.innerText = element.complemento1;
-
-    const li6 = document.createElement("li");
-    li6.append(a6);
-
-    const a7 =document.createElement("a");
-    a7.innerText = element.complemento2;
-
-    const li7 = document.createElement("li");
-    li7.append(a7);
-
-    const br4 = document.createElement('br')
-
-
-
-    const div = document.getElementsByClassName('describ-cardapio-itens')[0];
-    div.append(li, li1, li2, li3, li4, br1, hr, br2, li5, br3, li6, li7, br4);
-    
-    console.log(div)
+    containerDias.append(cardCardapio);
 }

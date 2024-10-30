@@ -1681,3 +1681,15 @@ body{
     }
 
 }
+
+.fodaseBOld {
+    font-weight:bold;
+}
+
+#container-dias {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-items: center;
+}
