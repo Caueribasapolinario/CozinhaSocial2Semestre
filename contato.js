@@ -36,6 +36,4 @@ function mostrarContato(element, wrapper) {
     ul.append(li1, li2);
 
     wrapper.append(h4, ul);
-
-    console.log(wrapper);
 }
