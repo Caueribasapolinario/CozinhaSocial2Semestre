@@ -9,7 +9,6 @@ window.addEventListener("load", async () => {
 
     const data = await result.json();
 
-    console.log(data.result)
 
     data.result.forEach(element => {
         montarSobre(element);
@@ -17,12 +16,9 @@ window.addEventListener("load", async () => {
 });
 
 function montarSobre(element) {
-    console.log(element)
 
     const h2 =document.createElement("h2");
     h2.innerText = element.Descricao;
-
-    console.log(h2)
 
     const h3 = document.createElement("h3");
     h3.innerText = element.FraseFinal;
@@ -34,6 +30,4 @@ function montarSobre(element) {
     const div = document.getElementsByClassName('txt-box-text')[0]
    
     div.append(h2, br1, br2,  h3);
-
-    console.log(div)
 }

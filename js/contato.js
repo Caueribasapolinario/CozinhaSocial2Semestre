@@ -15,7 +15,6 @@ window.addEventListener("load", async () => {
 });
 
 function mostrarContato(element, wrapper) {
-    console.log(element);
 
     const h4 = document.createElement("h4");
     h4.innerText = 'Contato:';
